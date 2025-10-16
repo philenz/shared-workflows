@@ -19,10 +19,7 @@ on:
 jobs:
   
   deploy_job:
-    runs-on: windows-latest
-    environment:
-      name: 'production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}  
+    runs-on: ubuntu-latest
     
     steps:
       
@@ -31,14 +28,11 @@ jobs:
         with:
           name: ${{ inputs.package-name }}
 
-      - name: Print Repo Location
-        run: echo "Workflow stored in shared-workflows repo"
+      - name: Secret Information
+        run: echo "Value of secret matches - ${{ secrets.azure-profile  == 'Placeholder' }}"
 
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: ${{ inputs.app-name }}
-          slot-name: ${{ inputs.deployment-slot }}
-          package: .
-          publish-profile: ${{ secrets.azure-profile }}
+      - name: Print name of App Service to deploy to
+        run: echo "App will be deployed to ${{ inputs.app-name }}"
+      
+      - name: List files in root directory
+        run: ls -l
